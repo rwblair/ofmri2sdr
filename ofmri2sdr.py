@@ -2,6 +2,7 @@ import csv
 import json
 from pprint import pprint
 
+from bs4 import BeautifulSoup
 from openpyxl import Workbook
 
 api_file = './ofmri.json'
@@ -74,9 +75,10 @@ for dataset in api_json:
             earliest = revision['date_set']
         else:
             pass
-    output.append('earliest')
+    output.append(earliest)
 
-    output.append(dataset['summary'])
+    summary = BeautifulSoup(dataset['summary']).getText()
+    output.append(summary)
 
     # citation
     output.append('')
@@ -117,6 +119,7 @@ for dataset in api_json:
         output.append('')
 
     ws.append(output)
-    #print(len(output))
+    print(len(output))
 
 wb.save(out_file)
+
